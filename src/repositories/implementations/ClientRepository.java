@@ -138,4 +138,33 @@ public class ClientRepository implements ClientInterface<Client> {
             throw new RuntimeException("Database error occurred while deleting client.", e);
         }
     }
+
+    @Override
+    public List<Client> findByName(String name) {
+        List<Client> clients = new ArrayList<>();
+        String sql = "SELECT * FROM clients WHERE name = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Client client = mapResultSetToClient(rs);
+                clients.add(client);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clients;
+    }
+
+    private Client mapResultSetToClient(ResultSet rs) throws SQLException {
+        Client client = new Client();
+        client.setId(rs.getObject("id", UUID.class));
+        client.setName(rs.getString("name"));
+        client.setAddress(rs.getString("address"));
+        client.setPhone(rs.getString("phone"));
+        client.setProfessional(rs.getBoolean("isProfessional"));
+
+        return client;
+    }
+
 }
