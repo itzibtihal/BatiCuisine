@@ -1,4 +1,4 @@
-package Ui;
+package views.submenu;
 
 import domain.entities.Client;
 import services.ClientService;
@@ -131,7 +131,6 @@ public class ClientUi {
 
         if (clientOptional.isPresent()) {
             Client clientToUpdate = clientOptional.get();
-
             System.out.println("Enter new client's name (press Enter to keep current):");
             String name = scanner.nextLine();
             if (!name.isEmpty()) {

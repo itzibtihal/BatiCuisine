@@ -1,4 +1,4 @@
-import Ui.ClientUi;
+import views.submenu.ClientUi;
 import config.DatabaseConnection;
 import repositories.implementations.ClientRepository;
 import services.ClientService;
