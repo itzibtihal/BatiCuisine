@@ -20,17 +20,34 @@ public class DatabaseConnection {
     private static final String PASSWORD = System.getenv("PASSWORD");
 
 
-    public static Connection getConnection() {
-        Connection connection = null;
+    private static DatabaseConnection instance;
+    private Connection connection;
+
+    private DatabaseConnection() throws SQLException {
         try {
-            Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Connection to PostgreSQL database established.");
-        } catch (ClassNotFoundException e) {
-            throw new DatabaseConnectionException("PostgreSQL JDBC Driver not found.", e);
+            System.out.println("Connected to the PostgreSQL server successfully.");
         } catch (SQLException e) {
-            throw new DatabaseConnectionException("Connection to PostgreSQL database failed.", e);
+            throw new DatabaseConnectionException("Error connecting to the database", e);
         }
+    }
+
+    public static DatabaseConnection getInstance() throws SQLException {
+        if (instance == null) {
+            synchronized (DatabaseConnection.class) {
+                if (instance == null) {
+                    instance = new DatabaseConnection();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public Connection getConnection() {
         return connection;
+    }
+
+    public void closeConnection() throws SQLException {
+        connection.close();
     }
 }

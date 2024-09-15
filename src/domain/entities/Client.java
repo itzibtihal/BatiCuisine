@@ -1,11 +1,11 @@
 package domain.entities;
 
-import javax.print.attribute.standard.Destination;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Client {
-    private int id;
+    private UUID id;
     private String name;
     private String address;
     private String phone;
@@ -20,24 +20,24 @@ public class Client {
         this.listProjects = listProjects;
     }
 
-    public Client(int id, String name, String address, String phone, boolean isProfessional) {
+    public Client(UUID id, String name, String address, String phone, boolean isProfessional) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.isProfessional = isProfessional;
-        listProjects=new ArrayList<>();
+        this.listProjects = new ArrayList<>();
     }
 
     public Client() {
-        listProjects=new ArrayList<>();
+        this.listProjects = new ArrayList<>();
     }
 
-    public int getId() {
+    public UUID getId() {  // Updated getter for UUID
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {  // Updated setter for UUID
         this.id = id;
     }
 
@@ -49,19 +49,19 @@ public class Client {
         this.name = name;
     }
 
-    public String getaddress() {
+    public String getAddress() {  // Fixed method name
         return address;
     }
 
-    public void setaddress(String address) {
+    public void setAddress(String address) {  // Fixed method name
         this.address = address;
     }
 
-    public String getphone() {
+    public String getPhone() {  // Fixed method name
         return phone;
     }
 
-    public void setphone(String phone) {
+    public void setPhone(String phone) {  // Fixed method name
         this.phone = phone;
     }
 
