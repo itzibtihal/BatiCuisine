@@ -76,7 +76,6 @@ public class ClientRepository implements ClientInterface<Client> {
         return Optional.empty();
     }
 
-
     @Override
     public List<Client> findAll() {
         List<Client> clients = new ArrayList<>();
@@ -99,7 +98,6 @@ public class ClientRepository implements ClientInterface<Client> {
         return clients;
     }
 
-
     @Override
     public Client update(Client client) {
         String query = "UPDATE clients SET name = ?, address = ?, phone = ?, isProfessional = ? WHERE id = ?;";
@@ -121,7 +119,6 @@ public class ClientRepository implements ClientInterface<Client> {
             return null;
         }
     }
-
 
     @Override
     public boolean delete(Client client) {
