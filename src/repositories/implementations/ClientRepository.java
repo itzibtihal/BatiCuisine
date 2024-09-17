@@ -3,6 +3,7 @@ package repositories.implementations;
 import config.DatabaseConnection;
 import domain.entities.Client;
 import repositories.interfaces.ClientInterface;
+import exceptions.ClientNotFoundException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +25,10 @@ public class ClientRepository implements ClientInterface<Client> {
     @Override
     public Client save(Client client) {
         try {
+            if (isClientNameExists(client.getName())) {
+                throw new RuntimeException("Client with the name '" + client.getName() + "' already exists.");
+            }
+
             connection.setAutoCommit(false);
             String query = "INSERT INTO clients (id, name, address, phone, isProfessional) VALUES (?, ?, ?, ?, ?);";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -37,7 +42,6 @@ public class ClientRepository implements ClientInterface<Client> {
 
                 preparedStatement.executeUpdate();
                 connection.commit();
-
 
                 client.setId(clientId);
             }
@@ -68,14 +72,15 @@ public class ClientRepository implements ClientInterface<Client> {
                     foundClient.setProfessional(resultSet.getBoolean("isProfessional"));
 
                     return Optional.of(foundClient);
+                } else {
+                    throw new ClientNotFoundException("Client with ID " + client.getId() + " not found.");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Database error occurred while finding client.", e);
         }
-        return Optional.empty();
     }
-
 
     @Override
     public List<Client> findAll() {
@@ -99,7 +104,6 @@ public class ClientRepository implements ClientInterface<Client> {
         return clients;
     }
 
-
     @Override
     public Client update(Client client) {
         String query = "UPDATE clients SET name = ?, address = ?, phone = ?, isProfessional = ? WHERE id = ?;";
@@ -109,19 +113,18 @@ public class ClientRepository implements ClientInterface<Client> {
             preparedStatement.setString(3, client.getPhone());
             preparedStatement.setBoolean(4, client.isProfessional());
             preparedStatement.setObject(5, client.getId()); // Set UUID parameter
+
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
                 return client;
             } else {
-                System.out.println("No client found with the specified ID.");
-                return null;
+                throw new ClientNotFoundException("No client found with ID " + client.getId());
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException("Database error occurred while updating client.", e);
         }
     }
-
 
     @Override
     public boolean delete(Client client) {
@@ -129,12 +132,57 @@ public class ClientRepository implements ClientInterface<Client> {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setObject(1, client.getId());
             int affectedRows = preparedStatement.executeUpdate();
-            return affectedRows > 0;
+            if (affectedRows > 0) {
+                return true;
+            } else {
+                throw new ClientNotFoundException("No client found with ID " + client.getId());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error deleting client.");
-            return false;
+            throw new RuntimeException("Database error occurred while deleting client.", e);
         }
+    }
+
+    @Override
+    public List<Client> findByName(String name) {
+        List<Client> clients = new ArrayList<>();
+        String sql = "SELECT * FROM clients WHERE name = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Client client = mapResultSetToClient(rs);
+                clients.add(client);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clients;
+    }
+
+    private Client mapResultSetToClient(ResultSet rs) throws SQLException {
+        Client client = new Client();
+        client.setId(rs.getObject("id", UUID.class));
+        client.setName(rs.getString("name"));
+        client.setAddress(rs.getString("address"));
+        client.setPhone(rs.getString("phone"));
+        client.setProfessional(rs.getBoolean("isProfessional"));
+
+        return client;
+    }
+
+    private boolean isClientNameExists(String name) throws SQLException {
+        String query = "SELECT COUNT(*) FROM clients WHERE name = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, name);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
     }
 
 
