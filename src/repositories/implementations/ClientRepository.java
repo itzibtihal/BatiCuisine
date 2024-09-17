@@ -25,6 +25,10 @@ public class ClientRepository implements ClientInterface<Client> {
     @Override
     public Client save(Client client) {
         try {
+            if (isClientNameExists(client.getName())) {
+                throw new RuntimeException("Client with the name '" + client.getName() + "' already exists.");
+            }
+
             connection.setAutoCommit(false);
             String query = "INSERT INTO clients (id, name, address, phone, isProfessional) VALUES (?, ?, ?, ?, ?);";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -166,5 +170,20 @@ public class ClientRepository implements ClientInterface<Client> {
 
         return client;
     }
+
+    private boolean isClientNameExists(String name) throws SQLException {
+        String query = "SELECT COUNT(*) FROM clients WHERE name = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, name);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
 
 }

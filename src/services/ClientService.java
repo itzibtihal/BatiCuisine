@@ -14,13 +14,14 @@ public class ClientService {
 
     public ClientService(ClientRepository clientRepository, ClientValidator clientValidator) {
         this.clientRepository = clientRepository;
-        this.clientValidator = clientValidator;
+        this.clientValidator = new ClientValidator();
     }
 
     public void save(Client client) throws InvalidClientException {
         clientValidator.validate(client);
         clientRepository.save(client);
     }
+
 
     public Optional<Client> findById(Client client) throws InvalidClientException {
         clientValidator.validateId(client.getId());

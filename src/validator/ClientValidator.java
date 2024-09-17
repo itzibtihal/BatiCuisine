@@ -2,10 +2,17 @@ package validator;
 
 import domain.entities.Client;
 import exceptions.InvalidClientException;
+import repositories.implementations.ClientRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ClientValidator {
+//    private ClientRepository clientRepository;
+//
+//    public ClientValidator(ClientRepository clientRepository) {
+//        this.clientRepository = clientRepository;
+//    }
 
     public void validate(Client client) throws InvalidClientException {
         validateName(client.getName());
@@ -27,6 +34,12 @@ public class ClientValidator {
         if (name.length() > 100) {
             throw new InvalidClientException("Le nom du client ne peut pas dépasser 100 caractères.");
         }
+
+//        // Check if the name is unique b
+//        List<Client> clientsWithSameName = clientRepository.findByName(name);
+//        if (!clientsWithSameName.isEmpty()) {
+//            throw new InvalidClientException("Le nom du client existe déjà. Il doit être unique.");
+//        }
     }
 
     private void validateAddress(String address) throws InvalidClientException {
@@ -45,7 +58,7 @@ public class ClientValidator {
     }
 
     private void validateIsProfessional(boolean isProfessional) throws InvalidClientException {
-        if (!isProfessional && !isProfessional) {
+        if (!isProfessional && isProfessional) {
             throw new InvalidClientException("Le champ 'professionnel' doit être spécifié.");
         }
     }
