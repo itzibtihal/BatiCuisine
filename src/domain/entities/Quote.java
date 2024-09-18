@@ -1,32 +1,32 @@
 package domain.entities;
 
-import domain.entities.Project;
-
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Quote {
-    private int id;
+    private UUID id;
     private double estimatedAmount;
     private LocalDate issueDate;
+    private LocalDate validatedDate;
     private boolean isAccepted;
     private Project project;
 
-    public Quote(int id, double estimatedAmount, LocalDate issueDate, boolean isAccepted, Project project) {
+    public Quote(UUID id, double estimatedAmount, LocalDate issueDate, LocalDate validatedDate, boolean isAccepted, Project project) {
         this.id = id;
         this.estimatedAmount = estimatedAmount;
         this.issueDate = issueDate;
+        this.validatedDate = validatedDate;
         this.isAccepted = isAccepted;
         this.project = project;
     }
 
-    public Quote() {
-    }
+    public Quote() {}
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -44,6 +44,14 @@ public class Quote {
 
     public void setIssueDate(LocalDate issueDate) {
         this.issueDate = issueDate;
+    }
+
+    public LocalDate getValidatedDate() {
+        return validatedDate;
+    }
+
+    public void setValidatedDate(LocalDate validatedDate) {
+        this.validatedDate = validatedDate;
     }
 
     public boolean isAccepted() {
@@ -68,6 +76,7 @@ public class Quote {
                 "id=" + id +
                 ", estimatedAmount=" + estimatedAmount +
                 ", issueDate=" + issueDate +
+                ", validatedDate=" + validatedDate +
                 ", isAccepted=" + isAccepted +
                 ", project=" + project +
                 '}';

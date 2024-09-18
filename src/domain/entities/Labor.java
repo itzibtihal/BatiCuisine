@@ -1,34 +1,37 @@
 package domain.entities;
 
-public class Labor extends Component{
+import java.util.UUID;
+
+public class Labor extends Component {
     private double hourlyRate;
     private double workHours;
     private double workerProductivity;
+    private Project project;
 
-
-    public Labor(String name, String componentType, double vatRate, double hourlyRate, double workHours, double workerProductivity) {
-        super(name, componentType, vatRate);
+    public Labor(UUID id, String name, String componentType, double vatRate, double hourlyRate, double workHours, double workerProductivity, Project project) {
+        super(id, name, componentType, vatRate, project);
         this.hourlyRate = hourlyRate;
         this.workHours = workHours;
         this.workerProductivity = workerProductivity;
+        this.project = project;
     }
 
     public Labor() {
     }
 
-    public double gethourlyRate() {
+    public double getHourlyRate() {
         return hourlyRate;
     }
 
-    public void sethourlyRate(double hourlyRate) {
+    public void setHourlyRate(double hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
 
-    public double getworkHours() {
+    public double getWorkHours() {
         return workHours;
     }
 
-    public void setworkHours(double workHours) {
+    public void setWorkHours(double workHours) {
         this.workHours = workHours;
     }
 
@@ -40,12 +43,21 @@ public class Labor extends Component{
         this.workerProductivity = workerProductivity;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
     @Override
     public String toString() {
-        return "WorkForce{" +
+        return "Labor{" +
                 "hourlyRate=" + hourlyRate +
                 ", workHours=" + workHours +
                 ", workerProductivity=" + workerProductivity +
+                ", project=" + project +
                 '}';
     }
 }
