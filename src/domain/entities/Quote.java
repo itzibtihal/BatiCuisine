@@ -74,9 +74,9 @@ public class Quote {
     public String toString() {
         return "Quote{" +
                 "id=" + id +
-                ", estimatedAmount=" + estimatedAmount +
-                ", issueDate=" + issueDate +
-                ", validatedDate=" + validatedDate +
+                ", estimated Amount=" + estimatedAmount +
+                ", issue Date=" + issueDate +
+                ", validated Date=" + validatedDate +
                 ", isAccepted=" + isAccepted +
                 ", project=" + project +
                 '}';
