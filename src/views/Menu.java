@@ -1,7 +1,7 @@
 package views;
 
 import repositories.implementations.ClientRepository;
-import services.ClientService;
+import services.implementations.ClientServiceImpl;
 import validator.ClientValidator;
 import config.DatabaseConnection;
 import views.submenu.submenu1;
@@ -22,7 +22,7 @@ public class Menu {
 
             ClientValidator clientValidator = new ClientValidator();
 
-            ClientService clientService = new ClientService(clientRepository, clientValidator);
+            ClientServiceImpl clientService = new ClientServiceImpl(clientRepository, clientValidator);
 
             submenu1 submenu = new submenu1(clientService);
 

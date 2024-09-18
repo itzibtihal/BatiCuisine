@@ -4,6 +4,7 @@ import domain.entities.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface ComponentInterface  <T extends Component> extends CrudInterface<Component>{
 
@@ -22,4 +23,5 @@ public interface ComponentInterface  <T extends Component> extends CrudInterface
     @Override
     public boolean delete(Component component);
 
+    public void updateFieldsComponent(UUID componentId, double vta);
 }

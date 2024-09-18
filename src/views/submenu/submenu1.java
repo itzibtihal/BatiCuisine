@@ -2,8 +2,7 @@ package views.submenu;
 
 import domain.entities.Client;
 import exceptions.InvalidClientException;
-import repositories.implementations.ClientRepository;
-import services.ClientService;
+import services.implementations.ClientServiceImpl;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -11,10 +10,10 @@ import java.util.Scanner;
 
 public class submenu1 {
 
-    private static ClientService clientService;
+    private static ClientServiceImpl clientService;
     private static Scanner scanner = new Scanner(System.in);
 
-    public submenu1(ClientService clientService) {
+    public submenu1(ClientServiceImpl clientService) {
         submenu1.clientService = clientService;
     }
 

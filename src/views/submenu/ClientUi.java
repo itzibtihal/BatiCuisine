@@ -1,7 +1,7 @@
 package views.submenu;
 
 import domain.entities.Client;
-import services.ClientService;
+import services.implementations.ClientServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,10 +10,10 @@ import java.util.UUID;
 
 public class ClientUi {
 
-    private ClientService clientService;
+    private ClientServiceImpl clientService;
     private Scanner scanner;
 
-    public ClientUi(ClientService clientService) {
+    public ClientUi(ClientServiceImpl clientService) {
         this.clientService = clientService;
         this.scanner = new Scanner(System.in);
     }
