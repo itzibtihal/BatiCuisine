@@ -1,14 +1,15 @@
-package services;
+package services.implementations;
 
 import domain.entities.Client;
 import exceptions.InvalidClientException;
 import repositories.implementations.ClientRepository;
+import services.ClientService;
 import validator.ClientValidator;
 
 import java.util.List;
 import java.util.Optional;
 
-public class ClientServiceImpl implements  ClientService {
+public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final ClientValidator clientValidator;
 

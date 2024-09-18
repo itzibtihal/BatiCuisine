@@ -1,7 +1,7 @@
 package views.submenu;
 
 import domain.entities.Client;
-import services.ClientServiceImpl;
+import services.implementations.ClientServiceImpl;
 
 import java.util.List;
 import java.util.Optional;

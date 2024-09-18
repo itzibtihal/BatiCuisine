@@ -2,7 +2,7 @@ import validator.ClientValidator;
 import views.UIFunctions;
 import config.DatabaseConnection;
 import repositories.implementations.ClientRepository;
-import services.ClientServiceImpl;
+import services.implementations.ClientServiceImpl;
 import views.submenu.submenu1;
 
 import java.sql.Connection;

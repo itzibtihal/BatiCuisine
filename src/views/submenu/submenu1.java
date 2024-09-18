@@ -2,7 +2,7 @@ package views.submenu;
 
 import domain.entities.Client;
 import exceptions.InvalidClientException;
-import services.ClientServiceImpl;
+import services.implementations.ClientServiceImpl;
 
 import java.util.InputMismatchException;
 import java.util.List;

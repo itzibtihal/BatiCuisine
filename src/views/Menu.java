@@ -1,7 +1,7 @@
 package views;
 
 import repositories.implementations.ClientRepository;
-import services.ClientServiceImpl;
+import services.implementations.ClientServiceImpl;
 import validator.ClientValidator;
 import config.DatabaseConnection;
 import views.submenu.submenu1;
