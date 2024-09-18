@@ -6,14 +6,14 @@ public class Labor extends Component {
     private double hourlyRate;
     private double workHours;
     private double workerProductivity;
-    private Project project;
+    private Component component;
 
     public Labor(UUID id, String name, String componentType, double vatRate, double hourlyRate, double workHours, double workerProductivity, Project project) {
         super(id, name, componentType, vatRate, project);
         this.hourlyRate = hourlyRate;
         this.workHours = workHours;
         this.workerProductivity = workerProductivity;
-        this.project = project;
+        this.component = component;
     }
 
     public Labor() {
@@ -43,12 +43,12 @@ public class Labor extends Component {
         this.workerProductivity = workerProductivity;
     }
 
-    public Project getProject() {
-        return project;
+    public Component getComponent() {
+        return component;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setComponent(Component component) {
+        this.component = component;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class Labor extends Component {
                 "hourlyRate=" + hourlyRate +
                 ", workHours=" + workHours +
                 ", workerProductivity=" + workerProductivity +
-                ", project=" + project +
+                ", component=" + component +
                 '}';
     }
 }
