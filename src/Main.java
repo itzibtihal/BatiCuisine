@@ -1,9 +1,8 @@
 import validator.ClientValidator;
 import views.UIFunctions;
-import views.submenu.ClientUi;
 import config.DatabaseConnection;
 import repositories.implementations.ClientRepository;
-import services.ClientService;
+import services.ClientServiceImpl;
 import views.submenu.submenu1;
 
 import java.sql.Connection;
@@ -42,7 +41,7 @@ public class Main {
 
                 ClientValidator clientValidator = new ClientValidator();
                 // Instantiate ClientService with the repository and validator
-                ClientService clientService = new ClientService(clientRepository, clientValidator);
+                ClientServiceImpl clientService = new ClientServiceImpl(clientRepository, clientValidator);
 
 
 
