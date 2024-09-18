@@ -95,6 +95,10 @@ public class Project {
         this.components = components;
     }
 
+    public void addComponent(Component component){
+        components.add(component);
+    }
+
     @Override
     public String toString() {
         return "Project{" +
