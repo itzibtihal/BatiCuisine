@@ -61,3 +61,18 @@ CREATE TABLE quotes (
                         project_id UUID,
                         FOREIGN KEY (project_id) REFERENCES Projects(id) ON DELETE CASCADE
 );
+
+ALTER TABLE projects ADD COLUMN surface DOUBLE PRECISION;
+
+ALTER TABLE components ADD COLUMN project_id INT;
+ALTER TABLE components ADD CONSTRAINT fk_project_id FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE;
+
+ALTER TABLE quotes ADD COLUMN validatedDate DATE;
+
+ALTER TABLE components ADD COLUMN project_id UUID;
+
+ALTER TABLE components ADD CONSTRAINT fk_project_id FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE;
+
+ALTER TABLE components DROP COLUMN project_id;
+ALTER TABLE components ADD COLUMN project_id UUID;
+ALTER TABLE components ADD CONSTRAINT fk_project_id FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE;
