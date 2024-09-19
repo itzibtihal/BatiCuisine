@@ -8,14 +8,14 @@ import java.util.UUID;
 
 public interface LaborService {
 
-    Labor saveLabor(Labor labor) throws IllegalArgumentException;
+    Labor save(Labor labor) throws IllegalArgumentException;
 
-    Optional<Labor> findLaborById(UUID id) throws IllegalArgumentException;
+    Optional<Labor> findById(UUID id) throws IllegalArgumentException;
 
-    List<Labor> findAllLabor();
+    List<Labor> findAll();
 
-    Labor updateLabor(Labor labor) throws IllegalArgumentException;
+    Labor update(Labor labor) throws IllegalArgumentException;
 
-    boolean deleteLabor(Labor labor) throws IllegalArgumentException;
+    boolean delete(Labor labor) throws IllegalArgumentException;
 
 }
