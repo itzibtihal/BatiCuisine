@@ -23,7 +23,7 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
 
-    private DatabaseConnection() throws SQLException {
+    public DatabaseConnection() throws SQLException {
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Connected to the PostgreSQL server successfully.");

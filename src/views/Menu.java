@@ -1,73 +1,60 @@
 package views;
 
 import repositories.implementations.ClientRepository;
+import repositories.implementations.ProjectRepository; // Make sure to import necessary classes
 import services.implementations.ClientServiceImpl;
+import services.implementations.ProjectServiceImpl;
 import validator.ClientValidator;
 import config.DatabaseConnection;
-import views.submenu.submenu1;
+import views.submenu.MaterialMenu;
+import views.submenu.LaborMenu;
+import views.submenu.Submenu1;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Menu {
-    public static void main(String[] args) {
+    private final ClientServiceImpl clientService;
+    private final ProjectServiceImpl projectService;
+    private final Submenu1 submenu;
+
+    public Menu(ClientServiceImpl clientService, ProjectServiceImpl projectService, MaterialMenu materialMenu, LaborMenu laborMenu) {
+        this.clientService = clientService;
+        this.projectService = projectService;
+        this.submenu = new Submenu1(clientService, projectService, materialMenu, laborMenu);
+    }
+
+    public void display() {
         Scanner scanner = new Scanner(System.in);
+        int choix;
 
-        Connection connection = null;
-        try {
-            connection = DatabaseConnection.getInstance().getConnection();
+        System.out.println();
+        System.out.println("Bienvenue dans l'application Bati Cuisine 🏠🍽️ !");
 
-            ClientRepository clientRepository = new ClientRepository(connection);
+        do {
+            displayMainMenu();
+            System.out.print("Choisissez une option : ");
+            choix = scanner.nextInt();
+            scanner.nextLine();
 
-            ClientValidator clientValidator = new ClientValidator();
-
-            ClientServiceImpl clientService = new ClientServiceImpl(clientRepository, clientValidator);
-
-            submenu1 submenu = new submenu1(clientService);
-
-            int choix;
-            System.out.println();
-            System.out.println("Bienvenue dans l'application Bati Cuisine 🏠🍽️ !");
-
-            do {
-                displayMainMenu();
-
-                System.out.print("Choisissez une option : ");
-                choix = scanner.nextInt();
-                scanner.nextLine();
-
-                switch (choix) {
-                    case 1:
-                        submenu1.createProjectMenu();
-                        break;
-                    case 2:
-                        System.out.println("Afficher les projets existants");
-                        break;
-                    case 3:
-                        System.out.println("Calculer le coût d'un projet");
-                        break;
-                    case 4:
-                        System.err.println("\n---  Fin du projet  ---");
-                        break;
-                    default:
-                        System.out.println("Option invalide. Veuillez réessayer.");
-                }
-            } while (choix != 4);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("Error establishing database connection.");
-        } finally {
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            switch (choix) {
+                case 1:
+                    submenu.createProjectMenu();
+                    break;
+                case 2:
+                    System.out.println("Afficher les projets existants");
+                    break;
+                case 3:
+                    System.out.println("Calculer le coût d'un projet");
+                    break;
+                case 4:
+                    System.err.println("\n---  Fin du projet  ---");
+                    break;
+                default:
+                    System.out.println("Option invalide. Veuillez réessayer.");
             }
-        }
+        } while (choix != 4);
 
         scanner.close();
     }
