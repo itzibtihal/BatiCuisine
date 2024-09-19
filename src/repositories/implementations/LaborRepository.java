@@ -14,11 +14,14 @@ import java.util.UUID;
 
 public class LaborRepository implements LaborInterface<Labor> {
 
-    private final Connection connection;
+    private Connection connection;
+    private ComponentRepository componentRepository;
 
-    public LaborRepository() throws SQLException {
+    public LaborRepository(ComponentRepository componentRepository) throws SQLException {
         this.connection = DatabaseConnection.getInstance().getConnection();
+        this.componentRepository = componentRepository;
     }
+
 
     @Override
     public Labor save(Labor labor) {
