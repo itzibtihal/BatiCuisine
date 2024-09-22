@@ -6,6 +6,7 @@ import domain.entities.Client;
 import domain.entities.Labor;
 import domain.entities.Material;
 import domain.entities.Project;
+import domain.enums.ProjectStatus;
 import repositories.interfaces.ProjectInterface;
 import services.ProjectService;
 import validator.ProjectValidator;
@@ -66,5 +67,11 @@ public class ProjectServiceImpl implements ProjectService {
     public void saveClientProject(Client client, Project project, Material material, Labor labor) {
         projectRepository.saveClientProject(client, project, material, labor);
     }
+
+    @Override
+    public List<Project> findByStatus(ProjectStatus status) {
+        return projectRepository.findByStatus(status);
+    }
+
 }
 
