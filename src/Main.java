@@ -1,15 +1,63 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import config.DatabaseConnection;
+import repositories.implementations.*;
+import services.ComponentService;
+import services.implementations.*;
+import validator.*;
+import views.Menu;
+import views.submenu.LaborMenu;
+import views.submenu.MaterialMenu;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class Main {
+    public static void main(String[] args) throws SQLException {
+
+        DatabaseConnection dbConnection = new DatabaseConnection();
+        //Connection connection = dbConnection.getConnection();
+        Connection connection = dbConnection.getConnection();
+
+        //repositories
+        ClientRepository clientRepository = new ClientRepository(connection);
+        ComponentRepository componentRepository = new ComponentRepository();
+        LaborRepository laborRepository = new LaborRepository(componentRepository);
+        MaterialRepository materialRepository = new MaterialRepository(componentRepository);
+        ProjectRepository projectRepository = new ProjectRepository(clientRepository,componentRepository,materialRepository,laborRepository);
+
+
+        // Initialize validators
+        ClientValidator clientValidator = new ClientValidator();
+        ProjectValidator projectValidator = new ProjectValidator();
+        MaterialValidator materialValidator = new MaterialValidator();
+        LaborValidator laborValidator = new LaborValidator();
+        ComponentValidator componentValidator = new ComponentValidator();
+
+        // services
+        ClientServiceImpl clientService = new ClientServiceImpl(clientRepository,clientValidator);
+        ComponentServiceImpl componentService = new ComponentServiceImpl(componentRepository,componentValidator);
+        LaborServiceImpl laborService = new LaborServiceImpl(laborRepository,laborValidator);
+        MaterialServiceImpl materialService = new MaterialServiceImpl(materialRepository,materialValidator);
+        ProjectServiceImpl projectService = new ProjectServiceImpl(projectRepository,projectValidator);
+
+        //
+        // Initialize menus
+
+        MaterialMenu materialMenu = new MaterialMenu(materialService, new ComponentServiceImpl(componentRepository,componentValidator));
+        LaborMenu laborMenu = new LaborMenu(laborService, new ComponentServiceImpl(componentRepository,componentValidator));
+
+
+        //// Initialize the main menu
+        //            Menu menu = new Menu(clientService, projectService, materialMenu, laborMenu);
+        Menu menu = new Menu(clientService,projectService,materialMenu,laborMenu);
+
+        menu.display();
+
+
+
+
+
+
+
+
     }
 }

@@ -1,7 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- Table for Clients
-CREATE TABLE Clients (
+CREATE TABLE clients (
                          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                          name VARCHAR(255) NOT NULL,
                          address VARCHAR(255),
@@ -13,7 +13,7 @@ CREATE TABLE Clients (
 CREATE TYPE projectStatus AS ENUM ('INPROGRESS', 'COMPLETED', 'CANCELLED');
 
 -- Table for Projects
-CREATE TABLE Projects (
+CREATE TABLE projects (
                           id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                           projectName VARCHAR(255) NOT NULL,
                           profitMargin DOUBLE PRECISION,
@@ -24,7 +24,7 @@ CREATE TABLE Projects (
 );
 
 -- Table for Components
-CREATE TABLE Components (
+CREATE TABLE components (
                             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                             name VARCHAR(255) NOT NULL,
                             componentType VARCHAR(255),
@@ -32,7 +32,7 @@ CREATE TABLE Components (
 );
 
 -- Table for Materials
-CREATE TABLE Materials (
+CREATE TABLE materials (
                            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                            component_id UUID,
                            unitCost DOUBLE PRECISION,
@@ -43,7 +43,7 @@ CREATE TABLE Materials (
 );
 
 -- Table for Labor
-CREATE TABLE Labor (
+CREATE TABLE labor (
                        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                        component_id UUID,
                        hourlyRate DOUBLE PRECISION,
@@ -53,7 +53,7 @@ CREATE TABLE Labor (
 );
 
 -- Table for Quotes
-CREATE TABLE Quotes (
+CREATE TABLE quotes (
                         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                         estimatedAmount DOUBLE PRECISION,
                         issueDate DATE,
@@ -61,3 +61,18 @@ CREATE TABLE Quotes (
                         project_id UUID,
                         FOREIGN KEY (project_id) REFERENCES Projects(id) ON DELETE CASCADE
 );
+
+ALTER TABLE projects ADD COLUMN surface DOUBLE PRECISION;
+
+ALTER TABLE components ADD COLUMN project_id INT;
+ALTER TABLE components ADD CONSTRAINT fk_project_id FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE;
+
+ALTER TABLE quotes ADD COLUMN validatedDate DATE;
+
+ALTER TABLE components ADD COLUMN project_id UUID;
+
+ALTER TABLE components ADD CONSTRAINT fk_project_id FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE;
+
+ALTER TABLE components DROP COLUMN project_id;
+ALTER TABLE components ADD COLUMN project_id UUID;
+ALTER TABLE components ADD CONSTRAINT fk_project_id FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE;
