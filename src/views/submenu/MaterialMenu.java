@@ -54,9 +54,18 @@ public class MaterialMenu {
             component.setComponentType(ComponentType.MATERIAL.name());
             component.setVatRate(vatRate);
             component.setProject(project);
+            component.setId(UUID.randomUUID());
 
+
+
+            //Component savedComponent = componentService.save(component);
             Component savedComponent = componentService.save(component);
 
+            //System.out.println("Saved Component ID: " + savedComponent.getId());
+
+            if (savedComponent.getId() == null) {
+                throw new IllegalArgumentException("⚠️ Component ID cannot be null or empty");
+            }
             UUID materialId = UUID.randomUUID();
 
             material = new Material(
@@ -74,10 +83,10 @@ public class MaterialMenu {
 
             materialService.save(material);
 
-            System.out.println("\n✅ Matériau ajouté avec succès !\n");
-            System.out.println(material);
+            System.out.println("\n                ✅ Matériau ajouté avec succès !\n");
+            System.out.println(MaterialTable(material));
 
-            System.out.print("👉 Souhaitez-vous ajouter un autre matériau ? (o/n) : ");
+            System.out.print("        Souhaitez-vous ajouter un autre matériau ? (o/n) : ");
             continueChoice = scanner.nextLine().trim().toLowerCase();
 
         } while (continueChoice.equals("o"));
@@ -89,13 +98,13 @@ public class MaterialMenu {
 
 
     private String MaterialTable(Material material) {
-        return "📋 Informations sur le Matériau\n" +
-                "📛 Nom : " + material.getName() + "\n" +
-                "📦 Quantité : " + material.getQuantity() + "\n" +
-                "💰 Coût Unitaire : €" + material.getUnitCost() + "\n" +
-                "🚚 Coût de Transport : €" + material.getTransportCost() + "\n" +
-                "🔧 Coefficient de Qualité : " + material.getCoefficientQuality() + "\n" +
-                "📊 Taux de TVA : " + material.getVatRate() + "%\n";
+        return "                📋 Informations sur le Matériau\n" +
+                "        Nom : " + material.getName() + "\n" +
+                "        Quantité : " + material.getQuantity() + "\n" +
+                "        Coût Unitaire : €" + material.getUnitCost() + "\n" +
+                "        Coût de Transport : €" + material.getTransportCost() + "\n" +
+                "        Coefficient de Qualité : " + material.getCoefficientQuality() + "\n" +
+                "        Taux de TVA : " + material.getVatRate() + "%\n";
     }
 
 }

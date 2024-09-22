@@ -27,24 +27,24 @@ public class LaborMenu {
         Labor labor = null;
 
         do {
-            System.out.println("\n 🔨 Ajouter une Main-d'œuvre 🔨");
+            System.out.println("\n                 🔨 Ajouter une Main-d'œuvre 🔨");
 
-            System.out.print("👷 Entrez le nom de la main-d'œuvre : ");
+            System.out.print("        👷 Entrez le nom de la main-d'œuvre : ");
             String name = scanner.nextLine();
 
-            System.out.print("📊 Entrez le taux de TVA de la main-d'œuvre : ");
+            System.out.print("        Entrez le taux de TVA de la main-d'œuvre : ");
             double vatRate = scanner.nextDouble();
             scanner.nextLine();
 
-            System.out.print("💰 Entrez le taux horaire pour cette main-d'œuvre (€/h) : ");
+            System.out.print("        Entrez le taux horaire pour cette main-d'œuvre (€/h) : ");
             double hourlyRate = scanner.nextDouble();
             scanner.nextLine();
 
-            System.out.print("⏱️ Entrez le nombre d'heures travaillées : ");
+            System.out.print("        Entrez le nombre d'heures travaillées : ");
             double workHours = scanner.nextDouble();
             scanner.nextLine();
 
-            System.out.print("🔧 Entrez le coefficient de productivité (1.0 = standard, > 1.0 = haute productivité) : ");
+            System.out.print("        Entrez le coefficient de productivité (1.0 = standard, > 1.0 = haute productivité) : ");
             double workerProductivity = scanner.nextDouble();
             scanner.nextLine();
 
@@ -53,6 +53,7 @@ public class LaborMenu {
             component.setComponentType(ComponentType.LABOR.name());
             component.setVatRate(vatRate);
             component.setProject(project);
+            component.setId(UUID.randomUUID());
 
             Component savedComponent = componentService.save(component);
 
@@ -71,10 +72,10 @@ public class LaborMenu {
 
             laborService.save(labor);
 
-            System.out.println("\n✅ Main-d'œuvre ajoutée avec succès !\n");
-            System.out.println(labor);
+            System.out.println("\n        ✅ Main-d'œuvre ajoutée avec succès !\n");
+            System.out.println(laborTable(labor));
 
-            System.out.print("👉 Souhaitez-vous ajouter une autre main-d'œuvre ? (o/n) : ");
+            System.out.print("                Souhaitez-vous ajouter une autre main-d'œuvre ? (o/n) : ");
             continueChoice = scanner.nextLine().trim().toLowerCase();
 
         } while (continueChoice.equals("o"));
@@ -82,6 +83,16 @@ public class LaborMenu {
         return labor;
     }
 
+
+
+    private String laborTable(Labor labor) {
+        return ("                👷 Informations sur la main-d'œuvre") + "\n" +
+                ("        👷 Nom : " + labor.getName()) + "\n" +
+                ("        Taux de TVA : " + labor.getVatRate() + "%") + "\n" +
+                ("        Taux horaire : €" + labor.getHourlyRate()) + "\n" +
+                ("        Heures travaillées : " + labor.getWorkHours()) + "\n" +
+                ("        Facteur de productivité : " + labor.getWorkerProductivity()) + "\n";
+    }
 
 
 

@@ -27,7 +27,7 @@ public class MaterialRepository implements MaterialInterface<Material> {
 
     @Override
     public Material save(Material material) {
-        String sql = "INSERT INTO materials (id, component_id, unitCost, quantity, transportCost, coefficientQuality) " +
+        String sql = "INSERT INTO materials (id, component_id, unitCost, quantity, transportCost, qualitycoefficient) " +
                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setObject(1, material.getId(), Types.OTHER);
@@ -41,7 +41,7 @@ public class MaterialRepository implements MaterialInterface<Material> {
             if (resultSet.next()) {
                 UUID generatedId = (UUID) resultSet.getObject(1);
                 material.setId(generatedId);
-                System.out.println("Material saved successfully with ID: " + generatedId);
+               // System.out.println("Material saved successfully with ID: " + generatedId);
             } else {
                 throw new SQLException("Failed to save material, no ID obtained.");
             }
@@ -89,7 +89,7 @@ public class MaterialRepository implements MaterialInterface<Material> {
 
     @Override
     public Material update(Material material) {
-        String sql = "UPDATE materials SET unitCost = ?, quantity = ?, transportCost = ?, coefficientQuality = ? WHERE id = ?";
+        String sql = "UPDATE materials SET unitCost = ?, quantity = ?, transportCost = ?, qualitycoefficient = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setDouble(1, material.getUnitCost());
             preparedStatement.setDouble(2, material.getQuantity());
