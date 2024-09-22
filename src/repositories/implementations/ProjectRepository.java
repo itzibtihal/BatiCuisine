@@ -211,7 +211,6 @@ public class ProjectRepository implements ProjectInterface<Project> {
         String sql = "DELETE FROM projects WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setObject(1, project.getId());
-
             int result = preparedStatement.executeUpdate();
             if (result == 1) {
                 System.out.println("Project deleted successfully");

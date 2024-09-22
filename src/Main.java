@@ -49,7 +49,7 @@ public class Main {
         //// Initialize the main menu
         //            Menu menu = new Menu(clientService, projectService, materialMenu, laborMenu);
         Menu menu = new Menu(clientService,projectService,materialMenu,laborMenu);
-
+        //to make sure everything is uptodate
         menu.display();
 
 
