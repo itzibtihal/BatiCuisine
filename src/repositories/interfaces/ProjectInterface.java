@@ -3,6 +3,7 @@ package repositories.interfaces;
 import domain.entities.Client;
 import domain.entities.Labor;
 import domain.entities.Material;
+import domain.enums.ProjectStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,4 +31,5 @@ public interface ProjectInterface <Project> extends CrudInterface<Project>{
 
     public void saveClientProject(Client client, Project project, Material material, Labor labor);
 
+    List<Project> findByStatus(ProjectStatus status);
 }

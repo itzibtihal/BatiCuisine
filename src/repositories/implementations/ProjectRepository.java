@@ -2,6 +2,7 @@ package repositories.implementations;
 
 import config.DatabaseConnection;
 import domain.entities.*;
+import domain.enums.ProjectStatus;
 import exceptions.ProjectsNotFoundException;
 import repositories.interfaces.ProjectInterface;
 
@@ -275,4 +276,38 @@ public class ProjectRepository implements ProjectInterface<Project> {
             }
         }
     }
+
+    @Override
+    public List<Project> findByStatus(ProjectStatus status) {
+        List<Project> projects = new ArrayList<>();
+        String sql = "SELECT * FROM projects p LEFT JOIN clients c ON p.client_id = c.id WHERE p.status = ?::projectStatus";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, status.name());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Client client = new Client();
+
+                client.setName(resultSet.getString("name"));
+
+
+                Project project = new Project(
+                        (UUID) resultSet.getObject("id"),
+                        resultSet.getString("projectName"),
+                        resultSet.getDouble("profitMargin"),
+                        resultSet.getDouble("totalCost"),
+                        resultSet.getString("status"), // Keep this as String
+                        resultSet.getDouble("surface"),
+                        client
+                );
+                projects.add(project);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error finding projects by status: " + e.getMessage());
+        }
+
+        return projects;
+    }
+
 }

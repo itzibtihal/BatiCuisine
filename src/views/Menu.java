@@ -8,6 +8,7 @@ import validator.ClientValidator;
 import config.DatabaseConnection;
 import views.submenu.MaterialMenu;
 import views.submenu.LaborMenu;
+import views.submenu.ProjectMenu;
 import views.submenu.Submenu1;
 
 import java.sql.Connection;
@@ -18,11 +19,13 @@ public class Menu {
     private final ClientServiceImpl clientService;
     private final ProjectServiceImpl projectService;
     private final Submenu1 submenu;
+    private final ProjectMenu projectMenu;
 
-    public Menu(ClientServiceImpl clientService, ProjectServiceImpl projectService, MaterialMenu materialMenu, LaborMenu laborMenu) {
+    public Menu(ClientServiceImpl clientService, ProjectServiceImpl projectService, MaterialMenu materialMenu, LaborMenu laborMenu, ProjectMenu projectMenu) {
         this.clientService = clientService;
         this.projectService = projectService;
         this.submenu = new Submenu1(clientService, projectService, materialMenu, laborMenu);
+        this.projectMenu = projectMenu;
     }
 
     public void display() {
@@ -43,7 +46,7 @@ public class Menu {
                     submenu.createProjectMenu();
                     break;
                 case 2:
-                    System.out.println("Afficher les projets existants");
+                    projectMenu.displayProjectMenu();
                     break;
                 case 3:
                     System.out.println("Calculer le coût d'un projet");
