@@ -14,24 +14,28 @@ import java.util.UUID;
 
 public class LaborRepository implements LaborInterface<Labor> {
 
-    private final Connection connection;
+    private Connection connection;
+    private ComponentRepository componentRepository;
 
-    public LaborRepository() throws SQLException {
+    public LaborRepository(ComponentRepository componentRepository) throws SQLException {
         this.connection = DatabaseConnection.getInstance().getConnection();
+        this.componentRepository = componentRepository;
     }
+
 
     @Override
     public Labor save(Labor labor) {
-        String sql = "INSERT INTO labor (name, hourlyRate, hoursWorked) VALUES (?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO labor (component_id, hourlyRate, workhours, workerproductivity) VALUES (?, ?, ?, ?) RETURNING id";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, labor.getName());
+            preparedStatement.setObject(1, labor.getComponent().getId());
             preparedStatement.setDouble(2, labor.getHourlyRate());
             preparedStatement.setDouble(3, labor.getWorkHours());
+            preparedStatement.setDouble(4, labor.getWorkerProductivity());
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 labor.setId(resultSet.getObject("id", UUID.class));
-                System.out.println("Labor saved successfully with ID: " + labor.getId());
+               // System.out.println("Labor saved successfully with ID: " + labor.getId());
             }
         } catch (SQLException e) {
             System.out.println("Error saving labor: " + e.getMessage());

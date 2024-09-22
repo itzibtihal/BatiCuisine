@@ -19,7 +19,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectInterface<Project> projectRepository;
     private final ProjectValidator projectValidator;
 
-    public ProjectServiceImpl(ProjectInterface<Project> projectRepository) {
+    public ProjectServiceImpl(ProjectInterface<Project> projectRepository, ProjectValidator projectValidator) {
         this.projectRepository = projectRepository;
         this.projectValidator = new ProjectValidator();
     }

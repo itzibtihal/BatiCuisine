@@ -44,7 +44,7 @@ public class ProjectRepository implements ProjectInterface<Project> {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 project.setId((UUID) resultSet.getObject("id"));
-                System.out.println("Project saved with ID: " + project.getId());
+                //System.out.println("Project saved with ID: " + project.getId());
                 return project;
             } else {
                 throw new SQLException("Creating project failed, no ID obtained.");

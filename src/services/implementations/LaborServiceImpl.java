@@ -21,7 +21,7 @@ public class LaborServiceImpl implements LaborService {
 
 
     @Override
-    public Labor saveLabor(Labor labor) throws IllegalArgumentException {
+    public Labor save(Labor labor) throws IllegalArgumentException {
         laborValidator.validateLabor(labor);
         return laborRepository.save(labor);
     }
@@ -29,7 +29,7 @@ public class LaborServiceImpl implements LaborService {
 
 
     @Override
-    public Optional<Labor> findLaborById(UUID id) throws IllegalArgumentException {
+    public Optional<Labor> findById(UUID id) throws IllegalArgumentException {
         laborValidator.validateId(id);
         Labor labor = new Labor();
         labor.setId(id);
@@ -38,13 +38,13 @@ public class LaborServiceImpl implements LaborService {
 
 
     @Override
-    public List<Labor> findAllLabor() {
+    public List<Labor> findAll() {
         return laborRepository.findAll();
     }
 
 
     @Override
-    public Labor updateLabor(Labor labor) throws IllegalArgumentException {
+    public Labor update(Labor labor) throws IllegalArgumentException {
         laborValidator.validateLabor(labor);
         return laborRepository.update(labor);
     }
@@ -52,7 +52,7 @@ public class LaborServiceImpl implements LaborService {
 
 
     @Override
-    public boolean deleteLabor(Labor labor) throws IllegalArgumentException {
+    public boolean delete(Labor labor) throws IllegalArgumentException {
         laborValidator.validateLabor(labor);
         return laborRepository.delete(labor);
     }
