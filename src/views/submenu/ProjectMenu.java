@@ -40,12 +40,12 @@ public class ProjectMenu {
                     listProjectsByStatus(ProjectStatus.CANCELLED);
                     break;
                 case 5:
-                    System.out.println("Retour au menu principal");
+                    System.err.println("Retour au menu principal");
                     break;
                 default:
-                    System.out.println("Option invalide. Veuillez réessayer.");
+                    System.err.println("Option invalide. Veuillez réessayer.");
             }
-        } while (choice != 5); // Exit the loop when the user chooses to return to the main menu
+        } while (choice != 5);
     }
 
     private void displayMenuOptions() {
@@ -86,18 +86,15 @@ public class ProjectMenu {
     }
 
     private void displayProjectTable(List<Project> projects) {
-        // Print the table header with proper alignment
         System.out.println("|--------------------------------|-----------------------------|---------------|---------------|");
         System.out.println("| Nom du projet                  | Client                      | Statut        | Profit Margin |");
         System.out.println("|--------------------------------|-----------------------------|---------------|---------------|");
 
-        // Print each project in the list
         for (Project project : projects) {
-            String clientName = project.getClient().getName(); // Assuming Project has a getClient() method
-            ProjectStatus status = project.getStatus(); // Get the project status
-            double profitMargin = project.getProfitMargin(); // Get the profit margin
+            String clientName = project.getClient().getName();
+            ProjectStatus status = project.getStatus();
+            double profitMargin = project.getProfitMargin();
 
-            // Format the output using | separators and align text with fixed widths
             System.out.printf("| %-30s | %-27s | %-13s | %-13.2f |%n",
                     project.getProjectName(),
                     clientName,
