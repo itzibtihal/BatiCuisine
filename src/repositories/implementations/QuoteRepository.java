@@ -136,7 +136,7 @@ public class QuoteRepository implements QuoteInterface {
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-            stmt.setObject(1, project.getId());  // Use the project ID from the passed Project object
+            stmt.setObject(1, project.getId());
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -144,7 +144,6 @@ public class QuoteRepository implements QuoteInterface {
                 Project foundProject = new Project();
                 Client client = new Client();
 
-                // Mapping the quote fields
                 quote.setId(UUID.fromString(rs.getString("quote_id")));
                 quote.setEstimatedAmount(rs.getDouble("estimatedamount"));
                 quote.setIssueDate(rs.getDate("issuedate").toLocalDate());
@@ -153,17 +152,14 @@ public class QuoteRepository implements QuoteInterface {
                         : null);
                 quote.setAccepted(rs.getBoolean("isaccepted"));
 
-                // Mapping the project fields (from ResultSet)
                 foundProject.setId(UUID.fromString(rs.getString("project_id")));
                 foundProject.setProjectName(rs.getString("projectname"));
-                quote.setProject(foundProject);  // Link the project to the quote
-
-                // Mapping the client fields (from ResultSet)
+                quote.setProject(foundProject);
                 client.setId(UUID.fromString(rs.getString("client_id")));
                 client.setName(rs.getString("name"));
-                foundProject.setClient(client);  // Link the client to the project
+                foundProject.setClient(client);
 
-                quotes.add(quote);  // Add the quote to the list
+                quotes.add(quote);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -173,7 +169,7 @@ public class QuoteRepository implements QuoteInterface {
             throw new QuotesNotFoundException("No quotes found for the provided project!");
         }
 
-        return quotes;  // Return the list of quotes related to the project
+        return quotes;
     }
 
 

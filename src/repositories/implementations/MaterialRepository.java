@@ -58,7 +58,7 @@ public class MaterialRepository implements MaterialInterface<Material> {
     public Optional<Material> findById(Material material) {
         String sql = "SELECT * FROM materials WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setObject(1, material.getId(), Types.OTHER); // Use UUID
+            preparedStatement.setObject(1, material.getId(), Types.OTHER);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -114,7 +114,7 @@ public class MaterialRepository implements MaterialInterface<Material> {
     public boolean delete(Material material) {
         String sql = "DELETE FROM materials WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setObject(1, material.getId(), Types.OTHER); // Use UUID
+            preparedStatement.setObject(1, material.getId(), Types.OTHER);
 
             int rowsAffected = preparedStatement.executeUpdate();
             return rowsAffected > 0;
@@ -158,7 +158,7 @@ public class MaterialRepository implements MaterialInterface<Material> {
 
             while (resultSet.next()) {
                 Material material = new Material();
-                material.setId((UUID) resultSet.getObject("id"));  // Map material ID as UUID
+                material.setId((UUID) resultSet.getObject("id"));
                 material.setUnitCost(resultSet.getDouble("unitcost"));
                 material.setQuantity(resultSet.getDouble("quantity"));
                 material.setTransportCost(resultSet.getDouble("transportcost"));

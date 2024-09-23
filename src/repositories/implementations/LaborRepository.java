@@ -141,7 +141,7 @@ public class LaborRepository implements LaborInterface<Labor> {
                 labor.setHourlyRate(resultSet.getDouble("hourlyRate"));
                 labor.setWorkHours(resultSet.getDouble("workHours"));
                 labor.setWorkerProductivity(resultSet.getDouble("workerProductivity"));
-                labor.setName(resultSet.getString("component_name")); // Assuming name comes from the Component
+                labor.setName(resultSet.getString("component_name"));
                 labor.setVatRate(resultSet.getDouble("vatrate"));
 
                 labors.add(labor);

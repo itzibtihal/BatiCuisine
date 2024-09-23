@@ -123,13 +123,12 @@ public class CostMenu {
             double discount = scanner.nextDouble();
             scanner.nextLine();
 
-            // Ensure the discount is valid
             if (discount < 0 || discount > 100) {
                 System.out.println("Invalid discount percentage. Please enter a value between 0 and 100.");
                 return;
             }
 
-            totalCost *= (1 - discount / 100);  // Apply the discount
+            totalCost *= (1 - discount / 100);
             System.out.println("       Discounted Total Cost: " + String.format("%.2f", totalCost) + " €");
         }
 
@@ -150,7 +149,6 @@ public class CostMenu {
             }
         }
 
-        // Prompt for validation date with validation
         LocalDate validatedDateParsed = null;
         while (validatedDateParsed == null) {
             System.out.print("       Entrez la date de validation (aaaa-MM-jj) : ");

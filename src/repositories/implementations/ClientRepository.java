@@ -60,7 +60,7 @@ public class ClientRepository implements ClientInterface<Client> {
     public Optional<Client> findById(Client client) {
         String query = "SELECT * FROM clients WHERE id = ?;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setObject(1, client.getId());  // Use UUID
+            preparedStatement.setObject(1, client.getId());
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -90,7 +90,7 @@ public class ClientRepository implements ClientInterface<Client> {
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Client client = new Client();
-                client.setId((UUID) resultSet.getObject("id")); // Set UUID field
+                client.setId((UUID) resultSet.getObject("id"));
                 client.setName(resultSet.getString("name"));
                 client.setAddress(resultSet.getString("address"));
                 client.setPhone(resultSet.getString("phone"));
@@ -112,7 +112,7 @@ public class ClientRepository implements ClientInterface<Client> {
             preparedStatement.setString(2, client.getAddress());
             preparedStatement.setString(3, client.getPhone());
             preparedStatement.setBoolean(4, client.isProfessional());
-            preparedStatement.setObject(5, client.getId()); // Set UUID parameter
+            preparedStatement.setObject(5, client.getId());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {

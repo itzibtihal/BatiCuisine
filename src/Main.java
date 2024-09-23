@@ -25,7 +25,7 @@ public class Main {
         QuoteRepository quoteRepository = new QuoteRepository();
 
 
-        // Initialize validators
+        // validators
         ClientValidator clientValidator = new ClientValidator();
         ProjectValidator projectValidator = new ProjectValidator();
         MaterialValidator materialValidator = new MaterialValidator();
@@ -41,8 +41,8 @@ public class Main {
         ProjectServiceImpl projectService = new ProjectServiceImpl(projectRepository,projectValidator);
         QuoteServiceImpl quoteService = new QuoteServiceImpl(quoteRepository,quoteValidator);
 
-        //
-        // Initialize menus
+
+        // menus
 
         MaterialMenu materialMenu = new MaterialMenu(materialService, new ComponentServiceImpl(componentRepository,componentValidator));
         LaborMenu laborMenu = new LaborMenu(laborService, new ComponentServiceImpl(componentRepository,componentValidator));
@@ -51,10 +51,10 @@ public class Main {
         QuoteMenu quoteMenu = new QuoteMenu(projectService,clientService,quoteService);
         CostMenu costMenu = new CostMenu(projectRepository,componentRepository,materialService,laborService,quoteService,quoteMenu,projectService);
 
-        //// Initialize the main menu
+        // the main menu
         //            Menu menu = new Menu(clientService, projectService, materialMenu, laborMenu);
         Menu menu = new Menu(clientService,projectService,materialMenu,laborMenu,projectMenu,settingsMenu,costMenu);
-        //to make sure everything is uptodate
+
         menu.display();
 
 

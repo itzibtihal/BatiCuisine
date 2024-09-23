@@ -110,7 +110,7 @@ public class ProjectRepository implements ProjectInterface<Project> {
             while (resultSet.next()) {
                 UUID projectId = (UUID) resultSet.getObject("project_id");
 
-                if (seenProjectIds.add(projectId)) { // Ensure unique projects
+                if (seenProjectIds.add(projectId)) {
                     Client client = new Client();
                     client.setId((UUID) resultSet.getObject("client_id"));
                     client.setName(resultSet.getString("clientName"));
@@ -253,7 +253,7 @@ public class ProjectRepository implements ProjectInterface<Project> {
                         resultSet.getString("projectName"),
                         resultSet.getDouble("profitMargin"),
                         resultSet.getDouble("totalCost"),
-                        resultSet.getString("status"), // Keep this as String
+                        resultSet.getString("status"),
                         resultSet.getDouble("surface"),
                         client
                 );

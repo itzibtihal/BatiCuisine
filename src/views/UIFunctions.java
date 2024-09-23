@@ -15,11 +15,10 @@ public class UIFunctions {
     }
 
     public static String centerText(String text, int width) {
-        // Count the number of emojis in the text
+
         int emojiCount = text.replaceAll("[^\\p{So}\\p{Cn}]", "").length();
 
-        // Adjust the width by subtracting extra space taken by emojis (assuming each emoji takes 2 chars)
-        int adjustedWidth = width - (emojiCount * 2);
+      int adjustedWidth = width - (emojiCount * 2);
 
         int paddingSize = (adjustedWidth - text.length()) / 2;
         String padding = " ".repeat(Math.max(0, paddingSize));
@@ -27,7 +26,7 @@ public class UIFunctions {
     }
 
     public static String addPadding(String option, int menuWidth) {
-        int paddingSize = menuWidth - option.length() - 6;  // -6 for the menu item number and border
-        return " ".repeat(Math.max(0, paddingSize));  // Prevent negative padding
+        int paddingSize = menuWidth - option.length() - 6;
+        return " ".repeat(Math.max(0, paddingSize));
     }
 }
