@@ -7,6 +7,7 @@ import views.Menu;
 import views.submenu.LaborMenu;
 import views.submenu.MaterialMenu;
 import views.submenu.ProjectMenu;
+import views.submenu.SettingsMenu;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -46,10 +47,11 @@ public class Main {
         MaterialMenu materialMenu = new MaterialMenu(materialService, new ComponentServiceImpl(componentRepository,componentValidator));
         LaborMenu laborMenu = new LaborMenu(laborService, new ComponentServiceImpl(componentRepository,componentValidator));
         ProjectMenu projectMenu = new ProjectMenu(projectService);
+        SettingsMenu settingsMenu = new SettingsMenu(projectService,clientService);
 
         //// Initialize the main menu
         //            Menu menu = new Menu(clientService, projectService, materialMenu, laborMenu);
-        Menu menu = new Menu(clientService,projectService,materialMenu,laborMenu,projectMenu);
+        Menu menu = new Menu(clientService,projectService,materialMenu,laborMenu,projectMenu,settingsMenu);
         //to make sure everything is uptodate
         menu.display();
 

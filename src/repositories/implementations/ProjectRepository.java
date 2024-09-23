@@ -10,10 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class ProjectRepository implements ProjectInterface<Project> {
     private final Connection connection;
@@ -85,39 +82,17 @@ public class ProjectRepository implements ProjectInterface<Project> {
 
 
     @Override
+
     public List<Project> findAll() {
-        String sql = "SELECT\n" +
-                "    p.id AS project_id,\n" +
-                "    p.projectName,\n" +
-                "    p.profitMargin,\n" +
-                "    p.totalCost,\n" +
-                "    p.status AS projectStatus,\n" +
-                "    p.surface,\n" +
-                "    cl.id AS client_id,\n" +
-                "    cl.name AS clientName,\n" +
-                "    cl.address AS clientAddress,\n" +
-                "    cl.phone AS clientPhone,\n" +
-                "    cl.isProfessional AS clientIsProfessional,\n" +
-                "    comp.id AS component_id,\n" +
-                "    comp.name AS componentName,\n" +
-                "    comp.componentType AS componentType,\n" +
-                "    comp.vatRate AS vatRate,\n" +
-                "    ma.id AS materialId,\n" +
-                "    ma.quantity AS quantity,\n" +
-                "    ma.transportCost AS transportCost,\n" +
-                "    ma.qualitycoefficient AS coefficientQuality,\n" +
-                "    la.id AS laborId,\n" +
-                "    la.hourlyrate AS hourlyCost,\n" +
-                "    la.workhours AS workingHours,\n" +
-                "    la.workerProductivity AS workerProductivity\n" +
-                "FROM\n" +
-                "    projects p\n" +
-                "    LEFT JOIN clients cl ON p.client_id = cl.id\n" +
-                "    LEFT JOIN components comp ON p.id = comp.project_id\n" +
-                "    LEFT JOIN materials ma ON comp.id = ma.component_id\n" +
-                "    LEFT JOIN labor la ON comp.id = la.component_id;";
+        String sql = "SELECT DISTINCT p.id AS project_id, p.projectName, p.profitMargin, p.totalCost, " +
+                "p.status AS projectStatus, p.surface, " +
+                "cl.id AS client_id, cl.name AS clientName, cl.address AS clientAddress, " +
+                "cl.phone AS clientPhone, cl.isProfessional AS clientIsProfessional " +
+                "FROM projects p " +
+                "LEFT JOIN clients cl ON p.client_id = cl.id;";
 
         List<Project> projects = new ArrayList<>();
+        Set<UUID> seenProjectIds = new HashSet<>();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -125,56 +100,26 @@ public class ProjectRepository implements ProjectInterface<Project> {
             while (resultSet.next()) {
                 UUID projectId = (UUID) resultSet.getObject("project_id");
 
-                Client client = new Client();
-                client.setId((UUID) resultSet.getObject("client_id"));
-                client.setName(resultSet.getString("clientName"));
-                client.setAddress(resultSet.getString("clientAddress"));
-                client.setPhone(resultSet.getString("clientPhone"));
-                client.setProfessional(resultSet.getBoolean("clientIsProfessional"));
+                if (seenProjectIds.add(projectId)) { // Ensure unique projects
+                    Client client = new Client();
+                    client.setId((UUID) resultSet.getObject("client_id"));
+                    client.setName(resultSet.getString("clientName"));
+                    client.setAddress(resultSet.getString("clientAddress"));
+                    client.setPhone(resultSet.getString("clientPhone"));
+                    client.setProfessional(resultSet.getBoolean("clientIsProfessional"));
 
-                Project project = new Project(
-                        projectId,
-                        resultSet.getString("projectName"),
-                        resultSet.getDouble("profitMargin"),
-                        resultSet.getDouble("totalCost"),
-                        resultSet.getString("projectStatus"),
-                        resultSet.getDouble("surface"),
-                        client
-                );
+                    Project project = new Project(
+                            projectId,
+                            resultSet.getString("projectName"),
+                            resultSet.getDouble("profitMargin"),
+                            resultSet.getDouble("totalCost"),
+                            resultSet.getString("projectStatus"),
+                            resultSet.getDouble("surface"),
+                            client
+                    );
 
-                projects.add(project);
-
-                UUID componentId = (UUID) resultSet.getObject("component_id");
-
-                Component component = new Component();
-                component.setId(componentId);
-                component.setName(resultSet.getString("componentName"));
-                component.setComponentType(resultSet.getString("componentType"));
-                component.setVatRate(resultSet.getDouble("vatRate"));
-                component.setProject(project);
-
-                project.addComponent(component);
-
-                UUID materialId = (UUID) resultSet.getObject("materialId");
-                Material material = new Material();
-                material.setId(materialId);
-                material.setQuantity(resultSet.getDouble("quantity"));
-                material.setTransportCost(resultSet.getDouble("transportCost"));
-                material.setCoefficientQuality(resultSet.getDouble("coefficientQuality"));
-                material.setComponent(component);
-
-                component.addMaterial(material);
-
-                UUID laborId = (UUID) resultSet.getObject("laborId");
-                Labor labor = new Labor();
-                labor.setId(laborId);
-                labor.setHourlyRate(resultSet.getDouble("hourlyCost"));
-                labor.setWorkHours(resultSet.getInt("workingHours"));
-                labor.setWorkerProductivity(resultSet.getDouble("workerProductivity"));
-                labor.setComponent(component);
-
-                component.addLabor(labor);
-
+                    projects.add(project);
+                }
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving projects: " + e.getMessage());
@@ -182,6 +127,7 @@ public class ProjectRepository implements ProjectInterface<Project> {
 
         return projects;
     }
+
 
     @Override
     public Project update(Project project) {
@@ -214,7 +160,7 @@ public class ProjectRepository implements ProjectInterface<Project> {
             preparedStatement.setObject(1, project.getId());
             int result = preparedStatement.executeUpdate();
             if (result == 1) {
-                System.out.println("Project deleted successfully");
+               // System.out.println("Project deleted successfully");
                 return true;
             } else {
                 throw new ProjectsNotFoundException("Delete failed, project not found");
