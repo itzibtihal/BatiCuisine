@@ -18,4 +18,5 @@ public interface LaborService {
 
     boolean delete(Labor labor) throws IllegalArgumentException;
 
+    List<Labor> findAllByProjectId(UUID projectId);
 }

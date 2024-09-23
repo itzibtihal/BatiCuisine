@@ -4,6 +4,7 @@ import domain.entities.Material;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface MaterialService {
     Material save(Material material);
@@ -15,4 +16,6 @@ public interface MaterialService {
     Material update(Material material);
 
     boolean delete(Material material);
+
+    List<Material> findAllByProjectId(UUID projectId);
 }

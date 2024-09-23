@@ -29,7 +29,7 @@ public class ClientUi {
             System.out.println("6. Exit");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -81,20 +81,11 @@ public class ClientUi {
     private void findClientById() {
         System.out.println("Enter client ID:");
         UUID clientId = UUID.fromString(scanner.nextLine());
-
-        // Create a Client object with the ID to pass to findById
         Client clientWithId = new Client();
         clientWithId.setId(clientId);
-
-        // Find the client by the ID
         Optional<Client> clientOptional = clientService.findById(clientWithId);
-
-        // Debugging information
         System.out.println("Searched for Client ID: " + clientId);
-
-        // Check if the client is present
         if (clientOptional.isPresent()) {
-            // Display the client info using the client retrieved from the database
             displayClientInfo(clientOptional.get());
         } else {
             System.out.println("Client not found.");

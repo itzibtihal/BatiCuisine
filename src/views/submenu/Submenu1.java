@@ -52,7 +52,7 @@ public class Submenu1 {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Entrée invalide. Veuillez entrer un nombre entier.");
-                scanner.nextLine(); // Clear the buffer
+                scanner.nextLine();
             }
         }
 

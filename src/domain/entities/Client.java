@@ -33,11 +33,11 @@ public class Client {
         this.listProjects = new ArrayList<>();
     }
 
-    public UUID getId() {  // Updated getter for UUID
+    public UUID getId() {
         return id;
     }
 
-    public void setId(UUID id) {  // Updated setter for UUID
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -49,15 +49,15 @@ public class Client {
         this.name = name;
     }
 
-    public String getAddress() {  // Fixed method name
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {  // Fixed method name
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public String getPhone() {  // Fixed method name
+    public String getPhone() {
         return phone;
     }
 

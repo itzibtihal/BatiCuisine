@@ -1,6 +1,7 @@
 package services.implementations;
 
 import domain.entities.Labor;
+import repositories.implementations.ComponentRepository;
 import repositories.implementations.LaborRepository;
 import services.LaborService;
 import validator.LaborValidator;
@@ -12,10 +13,12 @@ import java.util.UUID;
 public class LaborServiceImpl implements LaborService {
     private final LaborRepository laborRepository;
     private final LaborValidator laborValidator;
+    private ComponentRepository componentRepository;
 
-    public LaborServiceImpl(LaborRepository laborRepository, LaborValidator laborValidator) {
+    public LaborServiceImpl(LaborRepository laborRepository, LaborValidator laborValidator,ComponentRepository componentRepository) {
         this.laborRepository = laborRepository;
         this.laborValidator = laborValidator;
+        this.componentRepository = componentRepository;
     }
 
 
@@ -56,4 +59,34 @@ public class LaborServiceImpl implements LaborService {
         laborValidator.validateLabor(labor);
         return laborRepository.delete(labor);
     }
+
+    @Override
+    public List<Labor> findAllByProjectId(UUID projectId) {
+        return laborRepository.findAllByProjectId(projectId);
+    }
+
+    public double calculateLabor(Labor labor) {
+        return labor.getWorkHours() * labor.getHourlyRate() * labor.getWorkerProductivity();
+    }
+
+    public double getLaborVatRate(Labor labor) {
+        return componentRepository.findTvaForComponent(labor.getId());
+    }
+
+    public double calculateLaborBeforeVat(Labor labor) {
+        return calculateLabor(labor);
+    }
+
+    private double applyVat(double cost, double vatRate) {
+        return cost + (cost * vatRate / 100);
+    }
+
+    public double calculateLaborAfterVat(Labor labor) {
+        double costBeforeVat = calculateLaborBeforeVat(labor);
+        double vatRate = getLaborVatRate(labor);
+        return applyVat(costBeforeVat, vatRate);
+    }
+
+
+
 }
