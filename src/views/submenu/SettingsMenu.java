@@ -4,6 +4,7 @@ import domain.entities.Client;
 import domain.entities.Project;
 import domain.enums.ProjectStatus;
 import exceptions.ClientNotFoundException;
+import exceptions.ProjectsNotFoundException;
 import services.implementations.ClientServiceImpl;
 import services.implementations.ProjectServiceImpl;
 import views.UIFunctions;
@@ -41,7 +42,7 @@ public class SettingsMenu {
                     deleteClient();
                     break;
                 case 3:
-                    deleteClient();
+                    updateProject();
                     break;
                 case 4:
                     deleteProject();
@@ -83,13 +84,13 @@ public class SettingsMenu {
             Client client = new Client();
             client.setId(clientId);
 
-            // Retrieve the client using the existing findById method
+
             Optional<Client> optionalClient = clientService.findById(client);
 
             if (optionalClient.isPresent()) {
                 Client foundClient = optionalClient.get();
 
-                // Choose what to modify
+
                 System.out.println("Client trouvé : " + foundClient.getName());
                 System.out.println("Que souhaitez-vous modifier ? ");
                 System.out.println("1. Nom");
@@ -99,7 +100,7 @@ public class SettingsMenu {
                 System.out.println("5. Annuler");
 
                 int choice = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
+                scanner.nextLine();
 
                 switch (choice) {
                     case 1:
@@ -157,6 +158,77 @@ public class SettingsMenu {
             }
         } catch (IllegalArgumentException e) {
             System.err.println("ID du client invalide. Veuillez réessayer.");
+        }
+    }
+
+    private void updateProject() {
+        listAllProjects();
+        System.out.print("Entrez l'ID du projet à modifier : ");
+        String projectIdInput = scanner.nextLine();
+
+        try {
+            UUID projectId = UUID.fromString(projectIdInput);
+
+            Optional<Project> optionalProject = projectService.findById(projectId);
+
+            if (optionalProject.isPresent()) {
+                Project foundProject = optionalProject.get();
+
+
+                System.out.println("Projet trouvé : " + foundProject.getProjectName());
+                System.out.println("Que souhaitez-vous modifier ? ");
+                System.out.println("1. Nom du projet");
+                System.out.println("2. Marge bénéficiaire");
+                System.out.println("3. Coût total");
+                System.out.println("4. Statut");
+                System.out.println("5. Surface");
+                System.out.println("6. Annuler");
+
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+
+                switch (choice) {
+                    case 1:
+                        System.out.print("Entrez le nouveau nom du projet : ");
+                        foundProject.setProjectName(scanner.nextLine());
+                        break;
+                    case 2:
+                        System.out.print("Entrez la nouvelle marge bénéficiaire : ");
+                        foundProject.setProfitMargin(scanner.nextDouble());
+                        scanner.nextLine();
+                        break;
+                    case 3:
+                        System.out.print("Entrez le nouveau coût total : ");
+                        foundProject.setTotalCost(scanner.nextDouble());
+                        scanner.nextLine();
+                        break;
+                    case 4:
+                        System.out.print("Entrez le nouveau statut (INPROGRESS, COMPLETED, CANCELLED) : ");
+                        String statusInput = scanner.nextLine().toUpperCase();
+                        foundProject.setStatus(ProjectStatus.valueOf(statusInput));
+                        break;
+                    case 5:
+                        System.out.print("Entrez la nouvelle surface : ");
+                        foundProject.setSurface(scanner.nextDouble());
+                        scanner.nextLine();
+                        break;
+                    case 6:
+                        System.out.println("Modification annulée.");
+                        return;
+                    default:
+                        System.err.println("Option invalide. Veuillez réessayer.");
+                        return;
+                }
+
+                projectService.update(foundProject);
+                System.out.println("Projet modifié avec succès.");
+            } else {
+                System.err.println("Projet introuvable.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("ID du projet invalide. Veuillez réessayer.");
+        } catch (ProjectsNotFoundException e) {
+            System.err.println(e.getMessage());
         }
     }
 

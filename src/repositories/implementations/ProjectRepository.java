@@ -143,7 +143,7 @@ public class ProjectRepository implements ProjectInterface<Project> {
 
             int result = preparedStatement.executeUpdate();
             if (result == 1) {
-                System.out.println("Project updated successfully");
+                //System.out.println("Project updated successfully");
             } else {
                 throw new ProjectsNotFoundException("Update failed, project not found");
             }
