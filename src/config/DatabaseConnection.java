@@ -10,11 +10,6 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    // Database URL ( green / test )
-//    private static final String URL = "jdbc:postgresql://localhost:5432/btcuisine";
-//    private static final String USER = "postgres";
-//    private static final String PASSWORD = "password";
-
     private static final String URL = System.getenv("URL");
     private static final String USER = System.getenv("USER");
     private static final String PASSWORD = System.getenv("PASSWORD");
