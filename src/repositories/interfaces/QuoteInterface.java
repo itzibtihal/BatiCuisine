@@ -1,9 +1,11 @@
 package repositories.interfaces;
 
+import domain.entities.Project;
 import domain.entities.Quote;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface QuoteInterface extends CrudInterface<Quote> {
 
@@ -21,4 +23,9 @@ public interface QuoteInterface extends CrudInterface<Quote> {
 
     @Override
     public boolean delete(Quote entity);
+
+    List<Quote> findQuotesByProject(Project project);
+
+    boolean updateDevisStatus(UUID id);
+
 }

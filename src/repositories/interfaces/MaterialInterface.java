@@ -4,6 +4,7 @@ import domain.entities.Material;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface MaterialInterface <T extends Material> extends CrudInterface<Material>{
     @Override
@@ -20,4 +21,6 @@ public interface MaterialInterface <T extends Material> extends CrudInterface<Ma
 
     @Override
     public boolean delete(Material entity);
+
+    List<Material> findAllByProjectId(UUID id);
 }

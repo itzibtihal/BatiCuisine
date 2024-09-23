@@ -18,13 +18,15 @@ public class Menu {
     private final Submenu1 submenu;
     private final ProjectMenu projectMenu;
     private final SettingsMenu settingsMenu;
+    private final CostMenu costMenu;
 
-    public Menu(ClientServiceImpl clientService, ProjectServiceImpl projectService, MaterialMenu materialMenu, LaborMenu laborMenu, ProjectMenu projectMenu,SettingsMenu settingsMenu) {
+    public Menu(ClientServiceImpl clientService, ProjectServiceImpl projectService, MaterialMenu materialMenu, LaborMenu laborMenu, ProjectMenu projectMenu,SettingsMenu settingsMenu,CostMenu costMenu) {
         this.clientService = clientService;
         this.projectService = projectService;
         this.submenu = new Submenu1(clientService, projectService, materialMenu, laborMenu);
         this.projectMenu = projectMenu;
         this.settingsMenu = settingsMenu;
+        this.costMenu = costMenu;
 
     }
 
@@ -49,7 +51,7 @@ public class Menu {
                     projectMenu.displayProjectMenu();
                     break;
                 case 3:
-                    System.out.println("Calculer le coût d'un projet");
+                    totalCost();
                     break;
                 case 4:
                     settingsMenu.displaySettingMenu();
@@ -79,4 +81,8 @@ public class Menu {
 
         UIFunctions.printBorder(menuWidth);
     }
+    public void totalCost() {
+        costMenu.save();
+    }
+
 }

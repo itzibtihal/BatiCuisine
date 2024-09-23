@@ -32,4 +32,8 @@ public interface ProjectInterface <Project> extends CrudInterface<Project>{
     public void saveClientProject(Client client, Project project, Material material, Labor labor);
 
     List<Project> findByStatus(ProjectStatus status);
+
+    public void updateProject(UUID id, double marginProfit, double totalCost);
+
+    public boolean updateStatus(UUID id, String status);
 }

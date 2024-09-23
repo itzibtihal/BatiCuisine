@@ -4,6 +4,7 @@ package repositories.implementations;
 import config.DatabaseConnection;
 import domain.entities.Component;
 import domain.entities.Material;
+import domain.entities.Project;
 import exceptions.InvalidMaterialException;
 import exceptions.MaterialsNotFoundException;
 import repositories.implementations.ComponentRepository;
@@ -139,5 +140,51 @@ public class MaterialRepository implements MaterialInterface<Material> {
 
         return material;
     }
+
+
+    @Override
+    public List<Material> findAllByProjectId(UUID projectId) {
+        List<Material> materials = new ArrayList<>();
+        String sql = "SELECT m.id, m.unitCost, m.quantity, m.transportCost, m.qualityCoefficient, " +
+                "c.id AS component_id, c.name AS component_name, c.componenttype AS component_type, c.vatrate " +
+                "FROM materials m " +
+                "JOIN components c ON m.component_id = c.id " +
+                "WHERE c.project_id = ?";
+
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setObject(1, projectId, java.sql.Types.OTHER);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Material material = new Material();
+                material.setId((UUID) resultSet.getObject("id"));  // Map material ID as UUID
+                material.setUnitCost(resultSet.getDouble("unitcost"));
+                material.setQuantity(resultSet.getDouble("quantity"));
+                material.setTransportCost(resultSet.getDouble("transportcost"));
+                material.setCoefficientQuality(resultSet.getDouble("qualitycoefficient"));
+
+                // Create and set the component
+                Component component = new Component();
+                component.setId((UUID) resultSet.getObject("component_id"));
+                component.setName(resultSet.getString("component_name"));
+                component.setComponentType(resultSet.getString("component_type"));
+                component.setVatRate(resultSet.getDouble("vatrate"));
+
+                material.setComponent(component);
+
+                materials.add(material);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error finding materials by project ID: " + e.getMessage());
+        }
+
+        return materials;
+    }
+
+
+
+
+
 
 }

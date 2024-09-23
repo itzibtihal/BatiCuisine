@@ -122,4 +122,35 @@ public class LaborRepository implements LaborInterface<Labor> {
         labor.setWorkHours(resultSet.getDouble("hoursWorked"));
         return labor;
     }
+
+
+    @Override
+    public List<Labor> findAllByProjectId(UUID projectId) {
+        List<Labor> labors = new ArrayList<>();
+        String sql = "SELECT l.id, l.hourlyRate, l.workHours, l.workerProductivity, c.name AS component_name, c.vatrate " +
+                "FROM labor l " +
+                "JOIN components c ON l.component_id = c.id " +
+                "WHERE c.project_id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setObject(1, projectId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Labor labor = new Labor();
+                labor.setId(resultSet.getObject("id", UUID.class));
+                labor.setHourlyRate(resultSet.getDouble("hourlyRate"));
+                labor.setWorkHours(resultSet.getDouble("workHours"));
+                labor.setWorkerProductivity(resultSet.getDouble("workerProductivity"));
+                labor.setName(resultSet.getString("component_name")); // Assuming name comes from the Component
+                labor.setVatRate(resultSet.getDouble("vatrate"));
+
+                labors.add(labor);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error finding all labors by project ID: " + e.getMessage());
+        }
+        return labors;
+    }
+
+
 }

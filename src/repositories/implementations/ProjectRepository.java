@@ -55,7 +55,11 @@ public class ProjectRepository implements ProjectInterface<Project> {
 
     @Override
     public Optional<Project> findById(Project project) {
-        String sql = "SELECT * FROM projects WHERE id = ?";
+        String sql = "SELECT p.*, c.name AS client_name, c.address AS client_address, c.isProfessional AS client_professional " +
+                "FROM projects p " +
+                "JOIN clients c ON p.client_id = c.id " +
+                "WHERE p.id = ?";
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setObject(1, project.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -63,6 +67,10 @@ public class ProjectRepository implements ProjectInterface<Project> {
             if (resultSet.next()) {
                 Client client = new Client();
                 client.setId((UUID) resultSet.getObject("client_id"));
+                client.setName(resultSet.getString("client_name"));
+                client.setAddress(resultSet.getString("client_address"));
+                client.setProfessional(resultSet.getBoolean("client_professional"));
+
                 Project foundProject = new Project(
                         (UUID) resultSet.getObject("id"),
                         resultSet.getString("projectName"),
@@ -72,13 +80,15 @@ public class ProjectRepository implements ProjectInterface<Project> {
                         resultSet.getDouble("surface"),
                         client
                 );
+
                 return Optional.of(foundProject);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return Optional.empty();
     }
+
 
 
     @Override
@@ -255,5 +265,40 @@ public class ProjectRepository implements ProjectInterface<Project> {
 
         return projects;
     }
+
+    @Override
+    public void updateProject(UUID id, double marginProfit, double totalCost) {
+        String sql = "UPDATE projects SET profitMargin = ?, totalCost = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setDouble(1, marginProfit);
+            preparedStatement.setDouble(2, totalCost);
+            preparedStatement.setObject(3, id);
+            int result = preparedStatement.executeUpdate();
+            if (result == 1) {
+               // System.out.println("Project updated successfully");
+            } else {
+                System.err.println("Update failed, project not found");
+            }
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+    }
+
+    @Override
+    public boolean updateStatus(UUID id, String status) {
+        String sql = "UPDATE projects SET status = ?::projectStatus WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, status);
+            preparedStatement.setObject(2, id);
+            int result = preparedStatement.executeUpdate();
+            if (result == 1) {
+                return true;
+            }
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+        return false;
+    }
+
 
 }

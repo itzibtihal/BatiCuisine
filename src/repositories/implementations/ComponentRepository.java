@@ -245,5 +245,21 @@ public class ComponentRepository implements ComponentInterface<Component> {
         }
     }
 
+    @Override
+    public double findTvaForComponent(UUID id) {
+        String sql = "SELECT vatRate FROM components WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setObject(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getDouble("vatRate");
+            }
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+        return 0.0;
+    }
+
+
 
 }

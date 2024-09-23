@@ -24,4 +24,6 @@ public interface ComponentInterface  <T extends Component> extends CrudInterface
     public boolean delete(Component component);
 
     public void updateFieldsComponent(UUID componentId, double vta);
+
+    public double findTvaForComponent(UUID id);
 }
