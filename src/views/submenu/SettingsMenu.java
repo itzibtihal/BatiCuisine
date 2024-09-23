@@ -3,11 +3,13 @@ package views.submenu;
 import domain.entities.Client;
 import domain.entities.Project;
 import domain.enums.ProjectStatus;
+import exceptions.ClientNotFoundException;
 import services.implementations.ClientServiceImpl;
 import services.implementations.ProjectServiceImpl;
 import views.UIFunctions;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -33,9 +35,15 @@ public class SettingsMenu {
 
             switch (choice) {
                 case 1:
-                    deleteClient();
+                    modifyClient();
                     break;
                 case 2:
+                    deleteClient();
+                    break;
+                case 3:
+                    deleteClient();
+                    break;
+                case 4:
                     deleteProject();
                     break;
                 case 5:
@@ -56,12 +64,80 @@ public class SettingsMenu {
         UIFunctions.printBorder(menuWidth);
         System.out.println(UIFunctions.WHITE_BOLD + "|" + UIFunctions.centerText(title, menuWidth - 2) + "|" + UIFunctions.RESET);
         UIFunctions.printBorder(menuWidth);
-
-        System.out.println("|" + UIFunctions.BLUE + " 1. " + UIFunctions.BLUE + "Supprimer un client" + UIFunctions.RESET + UIFunctions.addPadding("Supprimer un client", menuWidth) + "|");
-        System.out.println("|" + UIFunctions.BLUE + " 2. " + UIFunctions.BLUE + "Supprimer un projet" + UIFunctions.RESET + UIFunctions.addPadding("Supprimer un projet", menuWidth) + "|");
+        System.out.println("|" + UIFunctions.BLUE + " 1. " + UIFunctions.BLUE + "Modifier un client" + UIFunctions.RESET + UIFunctions.addPadding("Modifier un client", menuWidth) + "|");
+        System.out.println("|" + UIFunctions.BLUE + " 2. " + UIFunctions.BLUE + "Supprimer un client" + UIFunctions.RESET + UIFunctions.addPadding("Supprimer un client", menuWidth) + "|");
+        System.out.println("|" + UIFunctions.BLUE + " 3. " + UIFunctions.BLUE + "Modifier un projet" + UIFunctions.RESET + UIFunctions.addPadding("Modifier un projet", menuWidth) + "|");
+        System.out.println("|" + UIFunctions.BLUE + " 4. " + UIFunctions.BLUE + "Supprimer un projet" + UIFunctions.RESET + UIFunctions.addPadding("Supprimer un projet", menuWidth) + "|");
         System.out.println("|" + UIFunctions.BLUE + " 5. " + UIFunctions.BLUE + "Retour" + UIFunctions.RESET + UIFunctions.addPadding("Retour", menuWidth) + "|");
 
         UIFunctions.printBorder(menuWidth);
+    }
+
+    private void modifyClient() {
+        listAllClients();
+        System.out.print("Entrez l'ID du client à modifier : ");
+        String clientIdInput = scanner.nextLine();
+
+        try {
+            UUID clientId = UUID.fromString(clientIdInput);
+            Client client = new Client();
+            client.setId(clientId);
+
+            // Retrieve the client using the existing findById method
+            Optional<Client> optionalClient = clientService.findById(client);
+
+            if (optionalClient.isPresent()) {
+                Client foundClient = optionalClient.get();
+
+                // Choose what to modify
+                System.out.println("Client trouvé : " + foundClient.getName());
+                System.out.println("Que souhaitez-vous modifier ? ");
+                System.out.println("1. Nom");
+                System.out.println("2. Adresse");
+                System.out.println("3. Téléphone");
+                System.out.println("4. Statut professionnel");
+                System.out.println("5. Annuler");
+
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+                switch (choice) {
+                    case 1:
+                        System.out.print("Entrez le nouveau nom : ");
+                        foundClient.setName(scanner.nextLine());
+                        break;
+                    case 2:
+                        System.out.print("Entrez la nouvelle adresse : ");
+                        foundClient.setAddress(scanner.nextLine());
+                        break;
+                    case 3:
+                        System.out.print("Entrez le nouveau numéro de téléphone : ");
+                        foundClient.setPhone(scanner.nextLine());
+                        break;
+                    case 4:
+                        System.out.print("Est-ce que ce client est professionnel ? (oui/non) : ");
+                        String isProfessionalInput = scanner.nextLine();
+                        foundClient.setProfessional(isProfessionalInput.equalsIgnoreCase("oui"));
+                        break;
+                    case 5:
+                        System.out.println("Modification annulée.");
+                        return;
+                    default:
+                        System.err.println("Option invalide. Veuillez réessayer.");
+                        return;
+                }
+
+
+                clientService.update(foundClient);
+                System.out.println("Client modifié avec succès.");
+            } else {
+                System.err.println("Client introuvable.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("ID du client invalide. Veuillez réessayer.");
+        } catch (ClientNotFoundException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private void deleteClient() {
