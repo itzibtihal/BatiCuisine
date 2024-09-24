@@ -132,7 +132,6 @@ public class CostMenu {
         }
 
 
-
         LocalDate issueDateParsed = null;
         while (issueDateParsed == null) {
             System.out.print("       Entrez la date d'émission (aaaa-MM-jj) : ");
@@ -155,6 +154,10 @@ public class CostMenu {
             if (!validatedDate.isEmpty()) {
                 try {
                     validatedDateParsed = LocalDate.parse(validatedDate);
+                    if (validatedDateParsed.isBefore(issueDateParsed)) {
+                        System.out.println("       La date de validation ne peut pas être antérieure à la date d'émission. Veuillez réessayer.");
+                        validatedDateParsed = null;
+                    }
                 } catch (DateTimeParseException e) {
                     System.out.println("       Date invalide. Veuillez entrer une date au format aaaa-MM-jj.");
                 }
@@ -162,6 +165,7 @@ public class CostMenu {
                 System.out.println("       La date ne peut pas être vide. Veuillez réessayer.");
             }
         }
+
 
 
         Quote quote = new Quote(UUID.randomUUID(), totalCost, issueDateParsed, validatedDateParsed, false, project);
