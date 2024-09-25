@@ -1,0 +1,40 @@
+
+javac -d out src/com/example/baticuisine/domain/enums/*.java  src/com/example/baticuisine/domain/entities/*.java
+             src/com/example/baticuisine/config/*.java  src/com/example/baticuisine/exceptions/*.java
+             src/com/example/baticuisine/repositories/interfaces/*.java  src/com/example/baticuisine/repositories/implementations/*.java
+             src/com/example/baticuisine/services/*.java  src/com/example/baticuisine/services/implementations/*.java
+             src/com/example/baticuisine/utiles/*.java  src/com/example/baticuisine/validator/*.java
+             src/com/example/baticuisine/views/submenu/*.java  src/com/example/baticuisine/views/*.java  src/com/example/baticuisine/Main.java
+
+    * -d dans la commande javac spécifie le répertoire de destination pour les fichiers de classe compilés
+    *  src/com/example/baticuisine/domain/enums/*.java spécifie les fichiers source à compiler
+    *  out est souvent utilisé par convention pour indiquer un répertoire de sortie
+
+jar cvf baticuisine.jar -C out .
+    * cvf "create, verbose, file" : crée un fichier JAR tout en affichant les fichiers ajoutés.
+    * -C out . : ajoute tous les fichiers du répertoire out au fichier JAR.
+
+java -cp "baticuisine.jar;C:\Users\Youcode\Downloads\postgresql-42.7.4.jar" com.example.baticuisine.Main
+    * -cp "baticuisine.jar;C:\Users\Youcode\Downloads\postgresql-42.7.4.jar" : spécifie les fichiers JAR à inclure dans le classpath
+    * com.example.baticuisine.Main : spécifie la classe principale à exécuter
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  java -jar baticuisine.jar
+//jar cmf src/MANIFEST.MF baticuisine.jar -C out .
