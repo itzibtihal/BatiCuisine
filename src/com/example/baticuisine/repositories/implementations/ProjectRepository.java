@@ -300,5 +300,7 @@ public class ProjectRepository implements ProjectInterface<Project> {
         return false;
     }
 
+     //get the total of componants in the a project
+    //get the total of materiel in a project
 
 }
